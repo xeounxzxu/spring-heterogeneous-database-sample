@@ -10,18 +10,16 @@ spring:
       ddl-auto: update
     open-in-view: false
 
-
 mysql:
   datasource:
-    master:
-      hikari:
+    hikari:
+      master:
         driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://localhost:13306/default
-        username: default
-        password: 1234
-    slave:
-      hikari:
+        jdbc-url: jdbc:mysql://localhost:13306/default
+        username: root
+        password: 12345
+      slave:
         driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://localhost:23306/default
-        username: default
-        password: 1234
+        jdbc-url: jdbc:mysql://localhost:23306/default
+        username: root
+        password: 12345

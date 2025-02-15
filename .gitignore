@@ -38,3 +38,5 @@ out/
 
 ### Kotlin ###
 .kotlin
+/docker/mysql_master/mysql/
+/docker/mysql_slave/mysql/
