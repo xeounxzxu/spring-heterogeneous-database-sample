@@ -15,12 +15,12 @@ class UserService(
     fun getAll(): List<UserEntity> {
 
         val beforeIsReadOnly = TransactionSynchronizationManager.isCurrentTransactionReadOnly()
-        println("🔍 Transaction readOnly status: $beforeIsReadOnly")
+        println("🔍Before Transaction readOnly status: $beforeIsReadOnly")
 
         val data =  userRepository.findAll()
 
         val afterIsReadOnly = TransactionSynchronizationManager.isCurrentTransactionReadOnly()
-        println("🔍 Transaction readOnly status: $afterIsReadOnly")
+        println("🔍After Transaction readOnly status: $afterIsReadOnly")
 
         return data
     }
