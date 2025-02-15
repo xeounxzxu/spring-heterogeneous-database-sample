@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: spring-heterogeneous-database-sample
+
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+
+
+mysql:
+  datasource:
+    master:
+      hikari:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:13306/default
+        username: default
+        password: 1234
+    slave:
+      hikari:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:23306/default
+        username: default
+        password: 1234
