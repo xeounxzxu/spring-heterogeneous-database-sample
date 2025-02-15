@@ -63,13 +63,12 @@ class MysqlDataSourceConfig {
 
         val routingDataSource = RoutingDataSource()
 
-        val datasourceMap: Map<Any, Any> =
+        routingDataSource.setTargetDataSources(
             mapOf(
                 "master" to masterDataSource,
                 "slave" to slaveDataSource
             )
-
-        routingDataSource.setTargetDataSources(datasourceMap)
+        )
 
         routingDataSource.setDefaultTargetDataSource(masterDataSource)
 
@@ -112,7 +111,9 @@ class MysqlDataSourceConfig {
 
 class RoutingDataSource : AbstractRoutingDataSource() {
     override fun determineCurrentLookupKey(): Any {
-        val isReadOnly: Boolean = TransactionSynchronizationManager.isCurrentTransactionReadOnly()
+        val isReadOnly: Boolean =
+            TransactionSynchronizationManager.isCurrentTransactionReadOnly()
+        println("isReady ========> $isReadOnly")
         return if (isReadOnly) "slave" else "master"
     }
 }
