@@ -88,6 +88,7 @@ class MysqlDataSourceConfig {
             dataSource = mysqlRoutingDataSource
             setPackagesToScan(BASE_PACKAGES)
             jpaVendorAdapter = HibernateJpaVendorAdapter()
+            persistenceUnitName = "mysql"
             setJpaPropertyMap(
                 mapOf(
                     "hibernate.dialect" to "org.hibernate.dialect.MySQLDialect",
