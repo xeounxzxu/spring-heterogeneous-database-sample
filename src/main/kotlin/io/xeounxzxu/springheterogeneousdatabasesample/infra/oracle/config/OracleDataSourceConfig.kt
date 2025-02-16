@@ -1,7 +1,7 @@
-package io.xeounxzxu.springheterogeneousdatabasesample.infra.mysql.config
+package io.xeounxzxu.springheterogeneousdatabasesample.infra.oracle.config
 
 import com.zaxxer.hikari.HikariDataSource
-import io.xeounxzxu.springheterogeneousdatabasesample.infra.mysql.config.MysqlDataSourceConfig.Companion.BASE_PACKAGES
+import io.xeounxzxu.springheterogeneousdatabasesample.infra.oracle.config.OracleDataSourceConfig.Companion.BASE_PACKAGES
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.autoconfigure.domain.EntityScan
@@ -10,7 +10,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.jdbc.DataSourceBuilder
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Primary
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 import org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource
@@ -29,27 +28,27 @@ import javax.sql.DataSource
 @EntityScan(BASE_PACKAGES)
 @EnableJpaRepositories(
     basePackages = [BASE_PACKAGES],
-    entityManagerFactoryRef = "mysqlEntityManagerFactory",
-    transactionManagerRef = "mysqlTransactionManager",
+    entityManagerFactoryRef = "oracleEntityManagerFactory",
+    transactionManagerRef = "oracleTransactionManager",
 )
-class MysqlDataSourceConfig {
+class OracleDataSourceConfig {
 
     companion object {
-        const val BASE_PACKAGES = "io.xeounxzxu.springheterogeneousdatabasesample.infra.mysql.repsitory"
-        const val MASTER_MYSQL_DATASOURCE = "masterMysqlDataSource"
-        const val SLAVE_MYSQL_DATASOURCE = "slaveMysqlDataSource"
+        const val BASE_PACKAGES = "io.xeounxzxu.springheterogeneousdatabasesample.infra.oracle.repository"
+        const val MASTER_ORACLE_DATASOURCE = "masterOracleDataSource"
+        const val SLAVE_ORACLE_DATASOURCE = "slaveOracleDataSource"
     }
 
-    @Bean(MASTER_MYSQL_DATASOURCE)
-    @ConfigurationProperties(prefix = "mysql.datasource.hikari.master")
+    @Bean(MASTER_ORACLE_DATASOURCE)
+    @ConfigurationProperties(prefix = "oracle.datasource.hikari.master")
     fun masterDataSource(): HikariDataSource {
         return DataSourceBuilder.create()
             .type(HikariDataSource::class.java)
             .build()
     }
 
-    @Bean(SLAVE_MYSQL_DATASOURCE)
-    @ConfigurationProperties(prefix = "mysql.datasource.hikari.slave")
+    @Bean(SLAVE_ORACLE_DATASOURCE)
+    @ConfigurationProperties(prefix = "oracle.datasource.hikari.slave")
     fun slaveDataSource(): HikariDataSource {
         return DataSourceBuilder.create()
             .type(HikariDataSource::class.java)
@@ -57,9 +56,9 @@ class MysqlDataSourceConfig {
     }
 
     @Bean
-    fun mysqlRoutingDataSource(
-        @Qualifier(MASTER_MYSQL_DATASOURCE) masterDataSource: DataSource,
-        @Qualifier(SLAVE_MYSQL_DATASOURCE) slaveDataSource: DataSource
+    fun oracleRoutingDataSource(
+        @Qualifier(MASTER_ORACLE_DATASOURCE) masterDataSource: DataSource,
+        @Qualifier(SLAVE_ORACLE_DATASOURCE) slaveDataSource: DataSource
     ): DataSource {
 
         val routingDataSource = RoutingDataSource()
@@ -77,23 +76,22 @@ class MysqlDataSourceConfig {
     }
 
     @Bean
-    fun mysqlDataSource(@Qualifier("mysqlRoutingDataSource") mysqlRoutingDataSource: DataSource): DataSource {
-        return LazyConnectionDataSourceProxy(mysqlRoutingDataSource)
+    fun oracleDataSource(@Qualifier("oracleRoutingDataSource") oracleRoutingDataSource: DataSource): DataSource {
+        return LazyConnectionDataSourceProxy(oracleRoutingDataSource)
     }
 
     @Bean
-    @Primary
-    fun mysqlEntityManagerFactory(
-        @Qualifier("mysqlRoutingDataSource") mysqlRoutingDataSource: DataSource,
+    fun oracleEntityManagerFactory(
+        @Qualifier("oracleRoutingDataSource") oracleRoutingDataSource: DataSource,
     ): LocalContainerEntityManagerFactoryBean {
         return LocalContainerEntityManagerFactoryBean().apply {
-            dataSource = mysqlRoutingDataSource
+            dataSource = oracleRoutingDataSource
             setPackagesToScan(BASE_PACKAGES)
             jpaVendorAdapter = HibernateJpaVendorAdapter()
-            persistenceUnitName = "mysql"
+            persistenceUnitName = "oracle"
             setJpaPropertyMap(
                 mapOf(
-                    "hibernate.dialect" to "org.hibernate.dialect.MySQLDialect",
+                    "hibernate.dialect" to "org.hibernate.dialect.OracleDialect",
                     "hibernate.hbm2ddl.auto" to "update",
                     "hibernate.temp.use_jdbc_metadata_defaults" to false
                 )
@@ -102,11 +100,11 @@ class MysqlDataSourceConfig {
     }
 
     @Bean
-    fun mysqlTransactionManager(
-        @Qualifier("mysqlEntityManagerFactory") mysqlEntityManagerFactory: LocalContainerEntityManagerFactoryBean,
+    fun oracleTransactionManager(
+        @Qualifier("oracleEntityManagerFactory") oracleEntityManagerFactory: LocalContainerEntityManagerFactoryBean,
     ): PlatformTransactionManager {
         return JpaTransactionManager().apply {
-            this.entityManagerFactory = mysqlEntityManagerFactory.getObject()
+            this.entityManagerFactory = oracleEntityManagerFactory.getObject()
         }
     }
 }
@@ -116,7 +114,7 @@ class RoutingDataSource : AbstractRoutingDataSource() {
     override fun determineCurrentLookupKey(): Any {
         val isReadOnly: Boolean =
             TransactionSynchronizationManager.isCurrentTransactionReadOnly()
-        println("isReady ========> $isReadOnly")
+        println("isReadOnly ========> $isReadOnly")
         return if (isReadOnly) "slave" else "master"
     }
 }

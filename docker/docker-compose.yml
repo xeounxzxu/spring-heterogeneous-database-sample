@@ -36,38 +36,38 @@ services:
       - ./mysql_slave/sql:/docker-entrypoint-initdb.d
       - ./mysql_slave/my.cnf:/etc/mysql/my.cnf  # my.cnf 마운트 추가
 
-#  oracle19c_master:
-#    image: gvenzl/oracle-free:latest
-#    container_name: oracle19c_master
-#    environment:
-#      - ORACLE_PASSWORD=oracle123
-#      - ORACLE_DATABASE=ORCLCDB
-#      - ORACLE_PDB=ORCLPDB1
-#      - ORACLE_CHARACTERSET=AL32UTF8
-#    ports:
-#      - "1521:1521"
-#      - "5500:5500"
-#    volumes:
-#      - oracle_master_data:/opt/oracle/oradata
-#    restart: always
-#
-#  oracle19c_slave:
-#    image: gvenzl/oracle-free:latest
-#    container_name: oracle19c_slave
-#    environment:
-#      - ORACLE_PASSWORD=oracle123
-#      - ORACLE_DATABASE=ORCLCDB
-#      - ORACLE_PDB=ORCLPDB1
-#      - ORACLE_CHARACTERSET=AL32UTF8
-#    ports:
-#      - "2521:1521"
-#      - "5501:5500" # 포트 변경
-#    volumes:
-#      - oracle_slave_data:/opt/oracle/oradata
-#    restart: always
-#
-#volumes:
-#  oracle_master_data:
-#    driver: local
-#  oracle_slave_data:
-#    driver: local
+  oracle19c_master:
+    image: gvenzl/oracle-free:latest
+    container_name: oracle19c_master
+    environment:
+      - ORACLE_PASSWORD=oracle123
+      - ORACLE_DATABASE=ORCLCDB
+      - ORACLE_PDB=ORCLPDB1
+      - ORACLE_CHARACTERSET=AL32UTF8
+    ports:
+      - "1521:1521"
+      - "5500:5500"
+    volumes:
+      - oracle_master_data:/opt/oracle/oradata
+    restart: always
+
+  oracle19c_slave:
+    image: gvenzl/oracle-free:latest
+    container_name: oracle19c_slave
+    environment:
+      - ORACLE_PASSWORD=oracle123
+      - ORACLE_DATABASE=ORCLCDB
+      - ORACLE_PDB=ORCLPDB1
+      - ORACLE_CHARACTERSET=AL32UTF8
+    ports:
+      - "2521:1521"
+      - "5501:5500" # 포트 변경
+    volumes:
+      - oracle_slave_data:/opt/oracle/oradata
+    restart: always
+
+volumes:
+  oracle_master_data:
+    driver: local
+  oracle_slave_data:
+    driver: local

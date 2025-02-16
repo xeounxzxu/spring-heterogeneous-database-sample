@@ -5,7 +5,6 @@ spring:
   jpa:
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQLDialect
     hibernate:
       ddl-auto: update
     open-in-view: false
@@ -23,6 +22,20 @@ mysql:
         jdbc-url: jdbc:mysql://localhost:23306/default
         username: root
         password: 12345
+
+oracle:
+  datasource:
+    hikari:
+      master:
+        driver-class-name: oracle.jdbc.OracleDriver
+        jdbc-url: jdbc:oracle:thin:@localhost:1521/ORCLPDB1
+        username: system
+        password: oracle123
+      slave:
+        driver-class-name: oracle.jdbc.OracleDriver
+        jdbc-url: jdbc:oracle:thin:@localhost:2521/ORCLPDB1
+        username: system
+        password: oracle123
 
 
 # DB ?? ?? (????)

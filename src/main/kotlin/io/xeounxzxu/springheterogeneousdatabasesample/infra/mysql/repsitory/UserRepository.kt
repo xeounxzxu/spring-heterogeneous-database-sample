@@ -9,11 +9,14 @@ interface UserRepository : JpaRepository<UserEntity, Long>, UserCustomRepository
 
 
 interface UserCustomRepository {
-    fun findByUsername(username: String): UserEntity?
+    fun findAll2(): List<UserEntity>
 }
 
 class UserCustomRepositoryImpl : UserCustomRepository, MysqlQuerydslSupport(UserEntity::class.java) {
-    override fun findByUsername(username: String): UserEntity? {
-        TODO("Not yet implemented")
+
+    val userQEntity = QUserEntity.userEntity
+
+    override fun findAll2(): List<UserEntity> {
+        return selectFrom(userQEntity).fetch()
     }
 }
