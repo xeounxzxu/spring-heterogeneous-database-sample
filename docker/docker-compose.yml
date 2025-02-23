@@ -36,38 +36,87 @@ services:
       - ./mysql_slave/sql:/docker-entrypoint-initdb.d
       - ./mysql_slave/my.cnf:/etc/mysql/my.cnf  # my.cnf 마운트 추가
 
-  oracle19c_master:
-    image: gvenzl/oracle-free:latest
-    container_name: oracle19c_master
-    environment:
-      - ORACLE_PASSWORD=oracle123
-      - ORACLE_DATABASE=ORCLCDB
-      - ORACLE_PDB=ORCLPDB1
-      - ORACLE_CHARACTERSET=AL32UTF8
-    ports:
-      - "1521:1521"
-      - "5500:5500"
-    volumes:
-      - oracle_master_data:/opt/oracle/oradata
-    restart: always
+  #  oracle19c_master:
+  #    image: gvenzl/oracle-free:latest
+  #    container_name: oracle19c_master
+  #    environment:
+  #      - ORACLE_PASSWORD=oracle123  # Oracle SYSTEM 계정 비밀번호 설정
+  #      - ORACLE_DATABASE=FREECDB    # CDB (Container Database) 이름
+  #      - ORACLE_PDB=FREEPDB1        # PDB (Pluggable Database) 이름
+  #      - ORACLE_CHARACTERSET=AL32UTF8  # 문자셋 설정 (UTF-8)
+  ##    environment:
+  ##      - ORACLE_PASSWORD=oracle123
+  ##      - ORACLE_DATABASE=ORCLCDB
+  ##      - ORACLE_PDB=ORCLPDB1
+  ##      - ORACLE_CHARACTERSET=AL32UTF8
+  #    ports:
+  #      - "1521:1521"
+  #      - "5500:5500"
+  #    volumes:
+  #      - oracle_master_data:/opt/oracle/oradata
+  #    restart: always
 
-  oracle19c_slave:
-    image: gvenzl/oracle-free:latest
-    container_name: oracle19c_slave
+  #  oracle19c_slave:
+  #    image: gvenzl/oracle-free:latest
+  #    container_name: oracle19c_slave
+  #    environment:
+  #      - ORACLE_PASSWORD=oracle123  # Oracle SYSTEM 계정 비밀번호 설정
+  #      - ORACLE_DATABASE=FREECDB    # CDB (Container Database) 이름
+  #      - ORACLE_PDB=FREEPDB1        # PDB (Pluggable Database) 이름
+  #      - ORACLE_CHARACTERSET=AL32UTF8  # 문자셋 설정 (UTF-8)
+  ##    environment:
+  ##      - ORACLE_PASSWORD=oracle123
+  ##      - ORACLE_DATABASE=ORCLCDB
+  ##      - ORACLE_PDB=ORCLPDB1
+  ##      - ORACLE_CHARACTERSET=AL32UTF8
+  #    ports:
+  #      - "2521:1521"
+  #      - "5501:5500" # 포트 변경
+  #    volumes:
+  #      - oracle_slave_data:/opt/oracle/oradata
+  #    restart: always
+
+  #  oracle19c:
+  #    image: container-registry.oracle.com/database/enterprise:19.3.0
+  #    container_name: oracle19c
+  #    environment:
+  #      - ORACLE_SID=ORCLCDB   # CDB 이름
+  #      - ORACLE_PDB=ORCLPDB1  # PDB 이름
+  #      - ORACLE_PWD=oracle123 # SYSTEM 계정 비밀번호
+  #      - ORACLE_CHARACTERSET=AL32UTF8  # 문자셋 설정
+  #    ports:
+  #      - "1521:1521"   # Oracle 기본 포트
+  #      - "5500:5500"   # Enterprise Manager 포트 (선택)
+  #    volumes:
+  #      - oracle_data:/opt/oracle/oradata  # 데이터베이스 데이터 저장 경로
+  #    restart: always
+  #    privileged: true  # 시스템 권한 필요 (Oracle 19c는 리눅스 커널 조정 필요)
+
+
+  #volumes:
+  #  oracle_master_data:
+  #    driver: local
+  #  oracle_slave_data:
+  #    driver: local
+  #  oracle_data:
+  #    driver: local
+  #
+
+
+  oracle19c:
+    image: doctorkirk/oracle-19c
+    container_name: oracle19c
     environment:
-      - ORACLE_PASSWORD=oracle123
-      - ORACLE_DATABASE=ORCLCDB
-      - ORACLE_PDB=ORCLPDB1
-      - ORACLE_CHARACTERSET=AL32UTF8
+      - ORACLE_SID=ORCLCDB   # 데이터베이스 SID (필요에 따라 변경 가능)
+      - ORACLE_PWD=oracle123 # SYSTEM 계정 비밀번호 (필요에 따라 변경 가능)
+      - ORACLE_CHARACTERSET=AL16UTF8  # 문자셋 (기본값: WE8MSWIN1252)
     ports:
-      - "2521:1521"
-      - "5501:5500" # 포트 변경
+      - "1521:1521"   # Oracle 기본 포트
     volumes:
-      - oracle_slave_data:/opt/oracle/oradata
+      - oracle_data:/opt/oracle/oradata  # 데이터베이스 데이터 저장 경로
     restart: always
+    privileged: true  # 시스템 권한 필요
 
 volumes:
-  oracle_master_data:
-    driver: local
-  oracle_slave_data:
+  oracle_data:
     driver: local
