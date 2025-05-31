@@ -4,7 +4,10 @@ plugins {
     id("org.springframework.boot") version "3.4.2"
     id("io.spring.dependency-management") version "1.1.7"
     kotlin("plugin.jpa") version "1.9.25"
-    kotlin("kapt") version "1.9.0"
+
+//    kotlin("kapt") version "1.9.0"
+
+    id("com.google.devtools.ksp") version "1.9.25-1.0.20"
 }
 
 group = "io.xeounxzxu"
@@ -32,12 +35,21 @@ dependencies {
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
     // QueryDSL 의존성 추가
-    implementation("com.querydsl:querydsl-jpa:5.0.0:jakarta")
-    kapt("com.querydsl:querydsl-apt:5.0.0:jakarta")
-    kapt("jakarta.annotation:jakarta.annotation-api")
-    kapt("jakarta.persistence:jakarta.persistence-api")
+//    implementation("com.querydsl:querydsl-jpa:5.0.0:jakarta")
+//    kapt("com.querydsl:querydsl-apt:5.0.0:jakarta")
+//    kapt("jakarta.annotation:jakarta.annotation-api")
+//    kapt("jakarta.persistence:jakarta.persistence-api")
+
+    implementation("io.github.openfeign.querydsl:querydsl-jpa:6.11")
+    ksp("io.github.openfeign.querydsl:querydsl-ksp-codegen:6.11")
+    ksp("jakarta.annotation:jakarta.annotation-api")
+    ksp("jakarta.persistence:jakarta.persistence-api")
+    annotationProcessor("io.github.openfeign.querydsl:querydsl-apt:6.11:jakarta")
 }
 
+//kapt {
+//    generateStubs = true
+//}
 
 val generated = file("src/main/generated")
 
@@ -56,11 +68,6 @@ tasks.named("clean") {
         generated.deleteRecursively()
     }
 }
-
-kapt {
-    generateStubs = true
-}
-
 
 kotlin {
     compilerOptions {

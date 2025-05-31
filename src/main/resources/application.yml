@@ -6,7 +6,7 @@ spring:
     properties:
       hibernate:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
     open-in-view: false
 
 mysql:

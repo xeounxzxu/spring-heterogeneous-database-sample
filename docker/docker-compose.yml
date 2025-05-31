@@ -103,20 +103,20 @@ services:
   #
 
 
-  oracle19c:
-    image: doctorkirk/oracle-19c
-    container_name: oracle19c
-    environment:
-      - ORACLE_SID=ORCLCDB   # 데이터베이스 SID (필요에 따라 변경 가능)
-      - ORACLE_PWD=oracle123 # SYSTEM 계정 비밀번호 (필요에 따라 변경 가능)
-      - ORACLE_CHARACTERSET=AL16UTF8  # 문자셋 (기본값: WE8MSWIN1252)
-    ports:
-      - "1521:1521"   # Oracle 기본 포트
-    volumes:
-      - oracle_data:/opt/oracle/oradata  # 데이터베이스 데이터 저장 경로
-    restart: always
-    privileged: true  # 시스템 권한 필요
-
-volumes:
-  oracle_data:
-    driver: local
+#  oracle19c:
+#    image: doctorkirk/oracle-19c
+#    container_name: oracle19c
+#    environment:
+#      - ORACLE_SID=ORCLCDB   # 데이터베이스 SID (필요에 따라 변경 가능)
+#      - ORACLE_PWD=oracle123 # SYSTEM 계정 비밀번호 (필요에 따라 변경 가능)
+#      - ORACLE_CHARACTERSET=AL16UTF8  # 문자셋 (기본값: WE8MSWIN1252)
+#    ports:
+#      - "1521:1521"   # Oracle 기본 포트
+#    volumes:
+#      - oracle_data:/opt/oracle/oradata  # 데이터베이스 데이터 저장 경로
+#    restart: always
+#    privileged: true  # 시스템 권한 필요
+#
+#volumes:
+#  oracle_data:
+#    driver: local
